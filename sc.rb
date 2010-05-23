@@ -8,20 +8,13 @@ include REXML
 class SCFile  
   @@files_count = 0
   
-  attr_writer :filename
-  attr_writer :type
-  attr_writer :title
-  attr_writer :bpm
+  attr_writer :filename, :type, :title,:bpm
+  attr_reader :filename, :type, :title,:bpm, :files_count
   
-  def initialize(filename, type)
-      @filename = filename
-      @type = type
+  def initialize()
       @@files_count += 1
   end
   
-  def file_count
-      return "#{@@files_count}"
-  end
 end
 
 program :name, 'Soundcloud CLI'
@@ -52,7 +45,8 @@ command :upload do |c|
       if File.directory?(arg)
          Dir.foreach(arg) do |f| 
            if File.extname(f) == '.flac'
-             file = SCFile.new(f,'flac')
+             file = SCFile.new
+             file.filename = f
              file.title = 'Test'
              file.bpm = '0'
              upfiles.push(file)   
@@ -81,12 +75,11 @@ command :upload do |c|
       set_buy = ask("Buy this set link: ")
       set_tags = ask_for_array("Tags (seperated by space): ")
       
-      # Sort out license
+      # Sort out license     
       choose do |menu|
-        menu.prompt = "Please choose the license for this set?  "
-        
-        menu.choices(:all_rights_reserved, :cc_by) do 
-          # put the stuff in a variable
+        menu.prompt = "Please choose the license for this set?  "     
+        menu.choices(:all_rights_reserved, :cc_by) do |chosen|
+          puts "Item chosen: #{chosen}"
         end
       end
     end # End setup set
