@@ -79,7 +79,7 @@ command :upload do |c|
       choose do |menu|
         menu.prompt = "Please choose the license for this set?  "     
         menu.choices(:all_rights_reserved, :cc_by) do |chosen|
-          puts "Item chosen: #{chosen}"
+          set_license = chosen
         end
       end
     end # End setup set
