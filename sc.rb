@@ -72,7 +72,7 @@ command :upload do |c|
       set_label = ask("Record Label: ")
       set_date = ask_for_date("Release Date (yy-mm-dd): ")
       set_label = ask("EAN/UPC: ")
-      set_buy = ask("Buy this set link: ")
+      set_buy = ask("Buy this set link: ") { |q| q.validate = /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix }
       set_tags = ask_for_array("Tags (seperated by space): ")
       
       # Sort out license     
