@@ -19,9 +19,6 @@ command :upload do |c|
   c.example 'Scans directory /home/ror/flac/album for FLAC files and uploads them to SoundCloud.','sc upload /home/ror/flac/album'
   c.example 'Uploads flac file /home/ror/flac/album/01.flac to SoundCloud.','sc upload /home/ror/flac/album/01.flac'
   
-  # Array of SoundCloud Files
-  upfiles = Array.new
-
   c.when_called do |args, options|
     args.each do | arg |
       if File.directory?(arg)
