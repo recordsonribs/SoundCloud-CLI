@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<users>
+<soundcloud>
 	<user>
 		<username>test</username>
 		<password>test</password>
 	</user>
-</users>
+	<license>cc-by-nc-sa</license>
+	<sharing>public</sharing>
+	<streamable>true</streamable>
+	<downloadable>true</downloadable>
+	<description>Blah.</description>
+	<genre></genre>
+	<tag_list>space seperated</tag_list>
+	<track_type>original</track_type>
+	<label_id></label_id>
+	<label_name></label_name>
+	<purchase_url></purchase_url>
+	<release></release>
+	<release_day></release_day>
+	<release_month></release_month>
+	<release_year></release_year>
+</soundcloud>

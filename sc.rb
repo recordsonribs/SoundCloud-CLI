@@ -31,6 +31,7 @@ if File.exist?('sc.xml')
   conf = Document.new File.new('sc.xml')
   uname = XPath.first( conf, "//username" ).text
   pword = XPath.first( conf, "//password" ).text
+  license = XPath.first( conf, "//license" ).text
 else
   uname = ask("SoundCloud Username: ")
   pword = password
@@ -54,7 +55,7 @@ command :upload do |c|
         Dir.foreach(arg) do |f|
           if File.extname(f) == '.flac'
              flac = FlacInfo.new(File.join(arg,f))
-             print "#{flac.tags['TRACKNUMBER']}. #{flac.tags['ARTIST']} - #{flac.tags['TITLE']}\n"
+             print "Uploading #{flac.tags['ARTIST']} - #{flac.tags['TITLE']}\n"
            end
          end
       else
