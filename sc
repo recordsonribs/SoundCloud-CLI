@@ -10,7 +10,8 @@ end
 
 # The script requires quite a few gems, so let the user know if they don't have them 
 # rather than just dumping them back to the command-line in a flurry of error messages
-%w(soundcloud flacinfo commander commander/import).each {|x|
+# TODO the libraries for the various file types should be included on the fly, but for now
+%w(soundcloud flacinfo commander commander/import mp3info ogginfo).each {|x|
   begin
     require x
   rescue LoadError
