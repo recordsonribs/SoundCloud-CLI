@@ -57,6 +57,8 @@ command :upload do |c|
       if File.directory?(file_path)
         print "Scanning directory #{file_path}..."
         Dir.foreach(file_path) do |f|
+          # Check to see if it is a music file, toss if not
+          
           path = File.expand_path(File.join(file_path,f))
           dir = File.basename(file_path)
           upload_track (file_path)
@@ -125,6 +127,7 @@ end
 # Mainly done to comply with the logic of DRY
 def upload_track(file)
   tags = read_tags(file)
+  print "Uploading #{tags.artist} - #{tags.title}..."
   SC.connect(:sc) do |soundcloud|
   end
 end
@@ -134,7 +137,7 @@ end
 def read_tags(file)
   ext = File.extname(file) 
   tags = Hash.new
-  
+ 
   case ext
     when '.flac'
       flac = FlacInfo.new(file)
