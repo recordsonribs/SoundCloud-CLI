@@ -45,92 +45,47 @@ command :upload do |c|
         puts "#{file_path} does not exist"
         exit (1)
       end
-            
-      SC.connect(:sc) do |soundcloud|
-          # If they have specified a playlist name, then make that playlist
-          if options.set
-            puts "Uploading set #{options.set}"
-            pl = soundcloud.Playlist.new
-            pl.title = options.set
+
+      # If they have specified a playlist name, then make that playlist
+      # TODO Move this to a more abstract layer for cleaness
+      if options.set
+        puts "Uploading set #{options.set}"
+        pl = soundcloud.Playlist.new
+        pl.title = options.set
+      end
+      
+      if File.directory?(file_path)
+        print "Scanning directory #{file_path}..."
+        Dir.foreach(file_path) do |f|
+          path = File.expand_path(File.join(file_path,f))
+          dir = File.basename(file_path)
+          upload_track (file_path)
+
+          if options.set 
+            pl.tracks << track
           end
           
-          if File.directory?(file_path)
-            puts "Scanning directory #{file_path}"
-
-            Dir.foreach(file_path) do |f|
-              path = File.expand_path(File.join(file_path,f))
-              dir = File.basename(file_path)
-              tags = read_tags(path)
-              
-              print "Uploading #{flac.tags['TITLE']}..."
-              $stdout.flush
-
-              track = soundcloud.Track.create(
-                       :title      => '',
-                       :downloadable => true,
-                       :license => pl.license,
-                       :genre => pl.genre,
-                       :sharing => pl.sharing,
-                       :release => pl.release,
-                       :description => '',
-                       :label_name => pl.label_name,
-                       :streamable => true,
-                       :track_type => 'original',
-                       :purchase_url => pl.purchase_url,
-                       :release_day => pl.release_day,
-                       :release_month => pl.release_month,
-                       :release_year => pl.release_year,
-                       :tag_list => pl.tag_list,
-                       :artwork_data => File.new("#{file_path}/Artwork.jpg"),
-                       :asset_data => File.new(path)
-                       )
-
-               pl.tracks << track
-               puts "done"
-               $stdout.flush
-            end    
-          else
-            puts "Scanning file #{file_path}"
-            
-            path = File.expand_path(file_path)
-            dir = File.basename(file_path)
-            tags = read_tags(path)
-            print 'Uploading file...'
-            track = soundcloud.Track.create(
-                     :title      => '',
-                     :downloadable => true,
-                     :license => pl.license,
-                     :genre => pl.genre,
-                     :sharing => pl.sharing,
-                     :release => pl.release,
-                     :description => '',
-                     :label_name => pl.label_name,
-                     :streamable => true,
-                     :track_type => 'original',
-                     :purchase_url => pl.purchase_url,
-                     :release_day => pl.release_day,
-                     :release_month => pl.release_month,
-                     :release_year => pl.release_year,
-                     :tag_list => pl.tag_list,
-                     :artwork_data => File.new("#{file_path}/Artwork.jpg"),
-                     :asset_data => File.new(path)
-                     )
-              print "done \n"
-              puts "'#{track.title}' is now available at #{track.permalink_url}"
-              
-              # If they have specified a playlist, then add track to it, remembering we may have many tracks
-              if options.set 
-                pl.tracks << track
-              end
-          end
+          puts "done"
+          $stdout.flush
+        end    
+      else
+        puts "Scanning file #{file_path}"     
+        path = File.expand_path(file_path)
+        dir = File.basename(file_path)
+        upload_track(file_path)
           
-          if options.set
-            print "Attempting to save playlist #{pl.title}..."
-            $stdout.flush
-            pl.save
-            puts "saved"
-            $stdout.flush
-          end
+        # If they have specified a playlist, then add track to it, remembering we may have many tracks
+        if options.set 
+          pl.tracks << track
+        end
+      end
+      
+      if options.set
+        print "Attempting to save playlist #{pl.title}..."
+        $stdout.flush
+        pl.save
+        puts "saved"
+        $stdout.flush
       end
     end
   end
@@ -166,6 +121,14 @@ command :release do |c|
   end
 end
 
+# An abstraction to upload the specified file to SoundCloud
+# Mainly done to comply with the logic of DRY
+def upload_track(file)
+  tags = read_tags(file)
+  SC.connect(:sc) do |soundcloud|
+  end
+end
+
 # Reads the tags from any file given, returns a tag array
 # Uses various libraries to do so
 def read_tags(file)
@@ -181,12 +144,17 @@ def read_tags(file)
       puts "#{file} is not a recognised file type (#{ext})"
   end
   
-  return tags
+  return flac
 end
 
 # Original coding thanks to Hannes Tydén (hannes@soundcloud.com)
-# 
+# TODO load up information from .sc configuration file
 def load_settings(setting)
+  if ! File.exist?("#{ENV['HOME']}/.sc")
+    puts "No configuration file set up, please enter details now"
+    exit(1)
+  end
+  
   case setting
   when :sc
     {
