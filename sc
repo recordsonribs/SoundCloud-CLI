@@ -156,9 +156,6 @@ def read_tags(file)
       puts "#{file} is not a recognised file type (#{ext})"
   end
   
-  tags.each do | tag, var|
-    puts "#{tag} = #{var}"
-  end
   return tags
 end
 
