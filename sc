@@ -134,17 +134,32 @@ end
 def read_tags(file)
   ext = File.extname(file)
   
+  tags = Hash.new
+  
   case ext
     when '.flac'
       flac = FlacInfo.new(file)
+      flac.tags.each do |tag, var|
+        tags[tag.downcase] = var
+      end
     when '.ogg'
-      
+      ogg = OggInfo.open(file)
+      ogg.tag.each do |tag, var|
+        tags[tag.downcase] = var
+      end
     when '.mp3'
+      mp3 = Mp3Info.open(file)
+      mp3.tag.each do |tag, var|
+        tags[tag.downcase] = var
+      end
     else 
       puts "#{file} is not a recognised file type (#{ext})"
   end
   
-  return flac
+  tags.each do | tag, var|
+    puts "#{tag} = #{var}"
+  end
+  return tags
 end
 
 # Original coding thanks to Hannes Tydén (hannes@soundcloud.com)
