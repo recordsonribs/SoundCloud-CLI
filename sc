@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# ^ enter your ruby location above
 begin
   require 'rubygems'
 rescue LoadError
