@@ -132,8 +132,7 @@ end
 # Reads the tags from any file given, returns a tag array
 # Uses various libraries to do so
 def read_tags(file)
-  ext = File.extname(file)
-  
+  ext = File.extname(file) 
   tags = Hash.new
   
   case ext
