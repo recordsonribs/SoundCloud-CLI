@@ -12,3 +12,14 @@ Requirements
 - soundcloud
 - commander
 - parseconfig
+
+Installation
+-------------
+
+(eventually)
+	gem install sc-cli
+
+Usage
+------
+
+	sc upload /path/to/file
