@@ -1,3 +1,11 @@
+begin
+  require 'rubygems'
+rescue LoadError
+  puts "You don't seem to have installed rubygems - how do you do anything?"
+  puts "See http://docs.rubygems.org/read/chapter/3 for details"
+  exit (1)
+end
+
 # The script requires quite a few gems, so let the user know if they don't have them 
 # rather than just dumping them back to the command-line in a flurry of error messages
 # TODO the libraries for the various file types should be included on the fly, but for now

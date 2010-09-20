@@ -1,14 +1,9 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'rubygems'
-rescue LoadError
-  puts "You don't seem to have installed rubygems - how do you do anything?"
-  puts "See http://docs.rubygems.org/read/chapter/3 for details"
-  exit (1)
-end
+lib_dir = File.join(File.dirname(__FILE__), '..', 'lib')
+$LOAD_PATH.unshift lib_dir if File.directory?(lib_dir)
 
-require '../lib/sc'
+require 'sc'
 
 program :name, 'Soundcloud CLI'
 program :version, '0.1'
