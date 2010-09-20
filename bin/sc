@@ -1,5 +1,4 @@
-#!/usr/bin/ruby
-# ^ enter your ruby location above
+#!/usr/bin/env ruby
 
 begin
   require 'rubygems'
