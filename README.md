@@ -11,3 +11,4 @@ Requirements
 - mp3info
 - soundcloud
 - commander
+- parseconfig
